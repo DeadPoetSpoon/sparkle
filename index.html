@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="color-scheme" content="light dark" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+        />
+        <title>Sparkle</title>
+    </head>
+    <body class="container">
+        <header>
+            <nav>
+                <ul>
+                    <li><strong>Sparkle</strong></li>
+                </ul>
+                <ul>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <article>
+                <select
+                    name="favorite-cuisine"
+                    aria-label="Select your book..."
+                    required
+                >
+                    <option selected disabled value="">
+                        Select your book...
+                    </option>
+                    <option>A</option>
+                    <option>B</option>
+                    <option>C</option>
+                </select>
+            </article>
+            <div>
+                <article id="cy" style="height: 40em"></article>
+                <article>bbb</article>
+            </div>
+        </main>
+        <script src="
+        https://cdn.jsdelivr.net/npm/cytoscape@3.33.1/dist/cytoscape.min.js
+        "></script>
+        <script src="app.js"></script>
+    </body>
+</html>
