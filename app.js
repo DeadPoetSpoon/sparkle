@@ -9,7 +9,7 @@ var cy = cytoscape({
       selector: "node",
       style: {
         "background-color": "#666",
-        label: "data(label)",
+        label: "data(name)",
       },
     },
 
@@ -21,7 +21,7 @@ var cy = cytoscape({
         "target-arrow-color": "#ccc",
         "target-arrow-shape": "triangle",
         "curve-style": "bezier",
-        "label": "data(label)",
+        label: "data(name)",
       },
     },
   ],
@@ -32,45 +32,51 @@ var cy = cytoscape({
   },
 });
 
+let authors = [];
 async function loadOptions() {
-  const authors = await import("./data/index-zh.js");
+  const authorsModule = await import("./data/index-zh.js");
+  authors = authorsModule.default;
   const authorSelector = document.getElementById("auther-selector");
   const bookSelector = document.getElementById("book-selector");
   const versionSelector = document.getElementById("version-selector");
-  
-  for (const author of authors.default) {
+
+  for (const author of authors) {
     const option = document.createElement("option");
-    option.value = author;
+    option.value = author.id;
     option.textContent = author.name;
     authorSelector.appendChild(option);
   }
-  
-  authorSelector.addEventListener("change", async function(event) {
+
+  authorSelector.addEventListener("change", async function (event) {
     const selectedAuthor = event.target.value;
-    bookSelector.innerHTML = "";
-    versionSelector.innerHTML = '<option selected value="default">default</option>';
-    
-    if (selectedAuthor && selectedAuthor.books) {
-        for (const book of selectedAuthor.books) {
+    bookSelector.innerHTML =
+      '<option selected disabled value="">Select book...</option>';
+    versionSelector.innerHTML =
+      '<option selected disabled value="">Select version...</option>';
+
+    for (const auther of authors) {
+      if (auther.id === selectedAuthor) {
+        for (const book of auther.books) {
           const option = document.createElement("option");
-          option.value = book;
-          option.textContent = book.label;
+          option.value = book.id;
+          option.textContent = book.name;
           bookSelector.appendChild(option);
         }
+      }
     }
   });
-  
-  bookSelector.addEventListener("change", async function(event) {
+
+  bookSelector.addEventListener("change", async function (event) {
     const selectedBook = event.target.value;
-    versionSelector.innerHTML = '<option selected value="default">default</option>';
-    
-    if (selectedBook) {
+    versionSelector.innerHTML =
+      '<option selected disabled value="">Select version...</option>';
+    if (selectedBook && selectedBook != "") {
       try {
         const versions = await import(`./data/${selectedBook}/index-zh.js`);
         for (const version of versions.default) {
           const option = document.createElement("option");
           option.value = version.version;
-          option.textContent = version.label;
+          option.textContent = version.name;
           versionSelector.appendChild(option);
         }
       } catch (error) {
@@ -78,26 +84,25 @@ async function loadOptions() {
       }
     }
   });
-  
-  versionSelector.addEventListener("change", async function(event) {
-    const selectedAuthor = authorSelector.value;
+
+  versionSelector.addEventListener("change", async function (event) {
     const selectedBook = bookSelector.value;
     const selectedVersion = versionSelector.value;
-    
-    if (selectedAuthor && selectedBook && selectedVersion) {
-      await loadData(selectedAuthor, selectedBook, selectedVersion);
+
+    if (selectedBook && selectedVersion) {
+      await loadData(selectedBook, selectedVersion);
     }
   });
 }
 
 loadOptions();
 
-async function loadData(author, book, version) {
+async function loadData(book, version) {
   if (!book || !version) {
     return;
   }
   try {
-    const module = await import(`./data/${book}/${book}-${version}.js`);
+    const module = await import(`./data/${book}/${version}.js`);
     const elements = module.default;
     cy.elements().remove();
     cy.add(elements);
@@ -107,14 +112,7 @@ async function loadData(author, book, version) {
   }
 }
 
-// document.getElementById("book-selector").addEventListener("change", function(event) {
-//   const selectedBook = event.target.value;
-//   if (selectedBook) {
-//     loadData(selectedBook);
-//   }
-// });
-
-cy.on("tap", "node", function(evt) {
+cy.on("tap", "node", function (evt) {
   const node = evt.target;
   const nodeData = node.data();
   const nodeInfo = document.getElementById("node-info");
@@ -125,7 +123,7 @@ cy.on("tap", "node", function(evt) {
   `;
 });
 
-cy.on("tap", function(evt) {
+cy.on("tap", function (evt) {
   if (evt.target === cy) {
     document.getElementById("node-info").innerHTML = "bbb";
   }
