@@ -17,6 +17,9 @@
                     <li><strong>Sparkle</strong></li>
                 </ul>
                 <ul>
+                    <li><a href="add-book.html">Add Book</a></li>
+                </ul>
+                <ul>
                     <li><a href="about.html">About</a></li>
                 </ul>
             </nav>
@@ -24,26 +27,38 @@
         <main>
             <article>
                 <select
-                    name="favorite-cuisine"
-                    aria-label="Select your book..."
+                    id="auther-selector"
+                    name="auther"
+                    aria-label="Select author..."
                     required
                 >
-                    <option selected disabled value="">
-                        Select your book...
+                </select>
+                <select
+                    id="book-selector"
+                    name="favorite-cuisine"
+                    aria-label="Select book..."
+                    required
+                >
+                </select>
+                <select
+                    id="version-selector"
+                    name="version"
+                    aria-label="Select version..."
+                    required
+                > 
+                    <option selected value="default">
+                        default
                     </option>
-                    <option>A</option>
-                    <option>B</option>
-                    <option>C</option>
                 </select>
             </article>
             <div>
                 <article id="cy" style="height: 40em"></article>
-                <article>bbb</article>
+                <article id="node-info">bbb</article>
             </div>
         </main>
         <script src="
         https://cdn.jsdelivr.net/npm/cytoscape@3.33.1/dist/cytoscape.min.js
         "></script>
-        <script src="app.js"></script>
+        <script type="module" src="app.js"></script>
     </body>
 </html>
