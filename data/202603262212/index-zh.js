@@ -1,7 +1,7 @@
 export default [
   {
     version: "default",
-    name: "A Default Version",
-    description: "The default version of A",
+    name: "荣如德-上海译文-2012",
+    description: "不错~不错~",
   },
 ];

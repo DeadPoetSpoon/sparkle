@@ -13,11 +13,19 @@
     <body class="container">
         <nav>
             <ul>
-                <li><strong>Sparkle</strong></li>
+                <li>
+                    <strong style="font-size: larger">Sparkle</strong><br />
+                    <span style="font-size: large">那些人啊，繁星闪闪</span>
+                </li>
             </ul>
             <ul>
-                <li><a href="add-book.html">Add Book</a></li>
-                <li><a href="about.html">About</a></li>
+                <li><a href="add-book.html">添加书籍</a></li>
+                <li><a href="about.html">关于</a></li>
+                <li>
+                    <a href="https://ifdian.net/a/deadpoetspoon"
+                        >请作者喝一杯咖啡</a
+                    >
+                </li>
             </ul>
         </nav>
         <main class="container">
@@ -25,34 +33,35 @@
                 <select
                     id="auther-selector"
                     name="auther"
-                    aria-label="Select author..."
+                    aria-label="作者..."
                     required
                 >
-                    <option selected disabled value="">Select author...</option>
+                    <option selected disabled value="">作者...</option>
                 </select>
                 <select
                     id="book-selector"
                     name="favorite-cuisine"
-                    aria-label="Select book..."
+                    aria-label="著作..."
                     required
                 >
-                    <option selected disabled value="">Select book...</option>
+                    <option selected disabled value="">著作...</option>
                 </select>
                 <select
                     id="version-selector"
                     name="version"
-                    aria-label="Select version..."
+                    aria-label="版本..."
                     required
                 >
-                    <option selected disabled value="">
-                        Select version...
-                    </option>
+                    <option selected disabled value="">版本...</option>
                 </select>
             </article>
-            <div>
-                <article id="cy" style="height: 40em"></article>
-                <article id="node-info">bbb</article>
-            </div>
+            <article
+                id="auther-info"
+                class="overflow-auto"
+                style="height: 10em"
+            ></article>
+            <article id="cy" style="height: 40em"></article>
+            <article id="node-info"></article>
         </main>
         <script src="
         https://cdn.jsdelivr.net/npm/cytoscape@3.33.1/dist/cytoscape.min.js

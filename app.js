@@ -28,18 +28,19 @@ var cy = cytoscape({
 
   layout: {
     name: "grid",
-    rows: 1,
+    rows: 4,
   },
 });
 
 let authors = [];
+const authorSelector = document.getElementById("auther-selector");
+const bookSelector = document.getElementById("book-selector");
+const versionSelector = document.getElementById("version-selector");
+const nodeInfo = document.getElementById("node-info");
+const autherInfo = document.getElementById("auther-info");
 async function loadOptions() {
   const authorsModule = await import("./data/index-zh.js");
   authors = authorsModule.default;
-  const authorSelector = document.getElementById("auther-selector");
-  const bookSelector = document.getElementById("book-selector");
-  const versionSelector = document.getElementById("version-selector");
-
   for (const author of authors) {
     const option = document.createElement("option");
     option.value = author.id;
@@ -62,6 +63,11 @@ async function loadOptions() {
           option.textContent = book.name;
           bookSelector.appendChild(option);
         }
+        autherInfo.innerHTML = `
+          <strong>${auther.name}</strong><br>
+          ${auther.biography || "N/A"}<br>
+          ${auther.description || "N/A"}
+        `;
       }
     }
   });
@@ -106,7 +112,7 @@ async function loadData(book, version) {
     const elements = module.default;
     cy.elements().remove();
     cy.add(elements);
-    cy.layout({ name: "grid", rows: 1 }).run();
+    cy.layout({ name: "grid", rows: 4 }).run();
   } catch (error) {
     console.error("Failed to load data:", error);
   }
@@ -115,7 +121,7 @@ async function loadData(book, version) {
 cy.on("tap", "node", function (evt) {
   const node = evt.target;
   const nodeData = node.data();
-  const nodeInfo = document.getElementById("node-info");
+
   nodeInfo.innerHTML = `
     <strong>Node Information:</strong><br>
     ID: ${nodeData.id}<br>
@@ -125,6 +131,6 @@ cy.on("tap", "node", function (evt) {
 
 cy.on("tap", function (evt) {
   if (evt.target === cy) {
-    document.getElementById("node-info").innerHTML = "bbb";
+    nodeInfo = "";
   }
 });

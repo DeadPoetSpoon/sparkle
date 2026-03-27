@@ -1,15 +1,23 @@
 export default [
   // list of graph elements to start with
   {
-    // node a
-    data: { id: "a", name: "A-a" },
+    data: {
+      id: "费奥多尔·巴甫洛维奇·卡拉马佐夫",
+      name: "费奥多尔·巴甫洛维奇·卡拉马佐夫",
+    },
   },
   {
-    // node b
-    data: { id: "b", name: "A-b" },
+    data: {
+      id: "德米特里·费奥多罗维奇·卡拉马佐夫",
+      name: "德米特里·费奥多罗维奇·卡拉马佐夫",
+      nickname: "米特里、米嘉、米剑卡",
+    },
   },
   {
-    // edge ab
-    data: { id: "ab", source: "a", target: "b", name: "A-ab" },
+    data: {
+      source: "费奥多尔·巴甫洛维奇·卡拉马佐夫",
+      target: "德米特里·费奥多罗维奇·卡拉马佐夫",
+      name: "长子",
+    },
   },
 ];
