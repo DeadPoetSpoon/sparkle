@@ -27,8 +27,7 @@ var cy = cytoscape({
   ],
 
   layout: {
-    name: "grid",
-    rows: 4,
+    name: "breadthfirst",
   },
 });
 
@@ -112,7 +111,7 @@ async function loadData(book, version) {
     const elements = module.default;
     cy.elements().remove();
     cy.add(elements);
-    cy.layout({ name: "grid", rows: 4 }).run();
+    cy.layout({ name: "breadthfirst" }).run();
   } catch (error) {
     console.error("Failed to load data:", error);
   }
