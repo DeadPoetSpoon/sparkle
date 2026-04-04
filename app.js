@@ -8,27 +8,79 @@ var cy = cytoscape({
     {
       selector: "node",
       style: {
+        height: "8rem",
+        width: "8rem",
         "background-color": "#666",
+        "text-max-width": "80px",
+        "text-wrap": "wrap",
+        "text-overflow-wrap": "whitespace",
         label: "data(name)",
+        "font-size": "data(fontSize)",
       },
     },
 
     {
       selector: "edge",
       style: {
-        width: 3,
+        width: "2rem",
         "line-color": "#ccc",
         "target-arrow-color": "#ccc",
         "target-arrow-shape": "triangle",
         "curve-style": "bezier",
+        "font-size": "data(edgeFontSize)",
         label: "data(name)",
       },
     },
   ],
+});
 
-  layout: {
-    name: "breadthfirst",
-  },
+// 缩放时自动调整文字大小 - 使用防抖优化性能
+let zoomTimeout = null;
+const baseNodeFontSize = 18;
+const baseEdgeFontSize = 14;
+
+cy.on("zoom", function () {
+  // 使用防抖避免频繁更新
+  if (zoomTimeout) {
+    clearTimeout(zoomTimeout);
+  }
+
+  zoomTimeout = setTimeout(() => {
+    const zoomLevel = cy.zoom();
+
+    // 根据缩放级别计算新的字体大小
+    const nodeFontSize = Math.max(1, baseNodeFontSize / zoomLevel);
+    const edgeFontSize = Math.max(1, baseEdgeFontSize / zoomLevel);
+
+    // 更新所有节点的字体大小数据
+    cy.nodes().forEach((node) => {
+      node.data("fontSize", nodeFontSize + "rem");
+    });
+
+    // 更新所有边的字体大小数据
+    cy.edges().forEach((edge) => {
+      edge.data("edgeFontSize", edgeFontSize + "rem");
+    });
+  }, 50); // 50ms防抖延迟
+});
+
+// 初始缩放级别设置
+cy.on("ready", function () {
+  // 设置初始缩放级别
+  cy.fit();
+
+  // 初始化字体大小数据
+  const initialZoom = cy.zoom();
+  const initialNodeFontSize = Math.max(1, baseNodeFontSize / initialZoom);
+  const initialEdgeFontSize = Math.max(1, baseEdgeFontSize / initialZoom);
+
+  cy.nodes().forEach((node) => {
+    node.data("fontSize", initialNodeFontSize + "rem");
+  });
+
+  cy.edges().forEach((edge) => {
+    edge.data("edgeFontSize", initialEdgeFontSize + "rem");
+  });
 });
 
 let authors = [];
@@ -110,8 +162,30 @@ async function loadData(book, version) {
     const module = await import(`./data/${book}/${version}.js`);
     const elements = module.default;
     cy.elements().remove();
-    cy.add(elements);
-    cy.layout({ name: "breadthfirst" }).run();
+
+    // 初始化字体大小数据
+    const initialZoom = cy.zoom();
+    const initialNodeFontSize = Math.max(1, baseNodeFontSize / initialZoom);
+    const initialEdgeFontSize = Math.max(1, baseEdgeFontSize / initialZoom);
+
+    // 为元素添加字体大小数据
+    const elementsWithFontSize = elements.map((element) => {
+      if (element.data) {
+        if (element.group === "nodes") {
+          element.data.fontSize = initialNodeFontSize + "rem";
+        } else if (element.group === "edges") {
+          element.data.edgeFontSize = initialEdgeFontSize + "rem";
+        }
+      }
+      return element;
+    });
+
+    cy.add(elementsWithFontSize);
+    cy.layout({
+      name: "cose",
+      nodeOverlap: 60,
+      avoidOverlap: true,
+    }).run();
   } catch (error) {
     console.error("Failed to load data:", error);
   }
@@ -122,9 +196,8 @@ cy.on("tap", "node", function (evt) {
   const nodeData = node.data();
 
   nodeInfo.innerHTML = `
-    <strong>Node Information:</strong><br>
-    ID: ${nodeData.id}<br>
-    Label: ${nodeData.label || "N/A"}
+    <strong>[${nodeData.id}]${nodeData.name}(${nodeData.gender})</strong><br>
+    ${nodeData.nickname ? nodeData.nickname.join(", ") : "N/A"}<br>
   `;
 });
 
