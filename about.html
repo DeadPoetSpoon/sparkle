@@ -1,16 +1,474 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="color-scheme" content="light dark" />
-        <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
-        />
-        <title>Sparkle</title>
+        <link rel="stylesheet" href="pico.min.css" />
+        <title>关于 Sparkle ✨</title>
+        <style>
+            /* 最小化的自定义样式，仅用于必要的微调 */
+            .hero {
+                text-align: center;
+                padding: 3rem 1rem;
+                margin-bottom: 2rem;
+                background: var(--primary);
+                color: white;
+            }
+            .feature-list li {
+                padding: 0.25rem 0;
+            }
+            .contribute-cards {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 1rem;
+                margin: 2rem 0;
+            }
+            @media (max-width: 768px) {
+                .contribute-cards {
+                    grid-template-columns: 1fr;
+                }
+            }
+            .sticky-nav {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: var(--background-color);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+        </style>
     </head>
     <body class="container">
-        <main>Add your book</main>
+        <nav>
+            <ul>
+                <li>
+                    <strong style="font-size: larger"
+                        ><a href="index.html">Sparkle ✨</a></strong
+                    ><br />
+                    <span style="font-size: large">那些人啊，繁星闪闪</span>
+                </li>
+            </ul>
+            <ul>
+                <li><a href="add-book.html">添加书籍</a></li>
+                <li><a href="about.html">关于</a></li>
+                <li>
+                    <a href="https://ifdian.net/a/deadpoetspoon"
+                        >请作者喝一杯咖啡</a
+                    >
+                </li>
+            </ul>
+        </nav>
+
+        <main class="container">
+            <!-- 英雄区域 -->
+            <section class="hero" id="hero">
+                <hgroup>
+                    <h1>Sparkle ✨</h1>
+                    <p style="font-size: 1.2rem; opacity: 0.9">
+                        那些人啊，繁星闪闪
+                    </p>
+                    <p>
+                        一个文学作品人物关系可视化工具，让你直观地探索小说中人物之间的联系
+                    </p>
+                </hgroup>
+            </section>
+
+            <!-- 项目简介 -->
+            <article id="introduction">
+                <h2>📚 项目简介</h2>
+                <p>
+                    Sparkle 是一个基于 Web
+                    的文学作品人物关系可视化工具。它使用交互式图谱展示小说中人物之间的关系网络，帮助读者更好地理解和探索文学作品中的人物关系。
+                </p>
+
+                <h3>✨ 主要功能</h3>
+                <ul class="feature-list">
+                    <li>
+                        <strong>多作者作品支持</strong> - 浏览不同作者的文学作品
+                    </li>
+                    <li>
+                        <strong>人物关系可视化</strong> -
+                        直观展示人物之间的复杂关系
+                    </li>
+                    <li>
+                        <strong>交互式操作</strong> -
+                        缩放、拖拽、点击查看详细信息
+                    </li>
+                    <li>
+                        <strong>多版本切换</strong> - 支持不同译本或版本的作品
+                    </li>
+                </ul>
+            </article>
+
+            <!-- 快速开始 -->
+            <article id="quickstart">
+                <h2>🚀 快速开始</h2>
+
+                <h3>直接访问（推荐）</h3>
+                <div class="grid">
+                    <div>
+                        <a
+                            href="https://deadpoetspoon.github.io/sparkle/"
+                            target="_blank"
+                            role="button"
+                            class="outline secondary"
+                            style="width: 100%"
+                        >
+                            🌐 GitHub Pages
+                        </a>
+                    </div>
+                    <div>
+                        <a
+                            href="https://sparkle-spoon.netlify.app/"
+                            target="_blank"
+                            role="button"
+                            class="outline secondary"
+                            style="width: 100%"
+                        >
+                            🌐 Netlify 部署
+                        </a>
+                    </div>
+                </div>
+
+                <h3>本地运行</h3>
+                <p>如果你想在本地运行 Sparkle：</p>
+                <ol>
+                    <li>
+                        克隆项目到本地：<code
+                            >git clone
+                            https://github.com/DeadPoetSpoon/sparkle.git</code
+                        >
+                    </li>
+                    <li>进入项目目录：<code>cd sparkle</code></li>
+                    <li>
+                        启动本地服务器（Python）：<code
+                            >python -m http.server 8000</code
+                        >
+                    </li>
+                    <li>在浏览器中访问：<code>http://localhost:8000</code></li>
+                </ol>
+            </article>
+
+            <!-- 使用说明 -->
+            <article id="usage">
+                <h2>🎮 使用说明</h2>
+
+                <h3>浏览现有作品</h3>
+                <ol>
+                    <li>在页面顶部的下拉菜单中选择<strong>作者</strong></li>
+                    <li>选择该作者的<strong>作品</strong></li>
+                    <li>选择<strong>版本</strong>（如果有多个版本）</li>
+                    <li>人物关系图谱将自动加载并显示</li>
+                </ol>
+
+                <h3>交互操作</h3>
+                <ul>
+                    <li><strong>缩放</strong>：使用鼠标滚轮或触摸板进行缩放</li>
+                    <li><strong>平移</strong>：拖拽画布背景进行平移</li>
+                    <li><strong>查看信息</strong>：点击节点查看人物详细信息</li>
+                    <li><strong>适应视图</strong>：双击画布背景可以适应视图</li>
+                </ul>
+            </article>
+
+            <!-- 贡献方式 -->
+            <article id="contribute">
+                <h2>🤝 贡献方式</h2>
+                <p>我们欢迎任何形式的贡献！Sparkle 是一个社区驱动的项目。</p>
+
+                <div class="contribute-cards">
+                    <article>
+                        <header>
+                            <h4>👥 非程序员</h4>
+                        </header>
+                        <p>如果你不熟悉编程，可以：</p>
+                        <ul>
+                            <li>在 GitHub Issues 提需求</li>
+                            <li>提供小说人物列表和关系描述</li>
+                            <li>帮助测试和反馈</li>
+                        </ul>
+                        <footer>
+                            <a
+                                href="https://github.com/DeadPoetSpoon/sparkle/issues"
+                                target="_blank"
+                                role="button"
+                                class="outline"
+                            >
+                                提交需求
+                            </a>
+                        </footer>
+                    </article>
+
+                    <article>
+                        <header>
+                            <h4>💻 程序员</h4>
+                        </header>
+                        <p>如果你熟悉编程，可以：</p>
+                        <ul>
+                            <li>提交代码改进</li>
+                            <li>添加新的文学作品数据</li>
+                            <li>修复 bug 或优化功能</li>
+                        </ul>
+                        <footer>
+                            <a
+                                href="https://github.com/DeadPoetSpoon/sparkle"
+                                target="_blank"
+                                role="button"
+                                class="outline"
+                            >
+                                参与开发
+                            </a>
+                        </footer>
+                    </article>
+
+                    <article>
+                        <header>
+                            <h4>📖 文学爱好者</h4>
+                        </header>
+                        <p>如果你热爱文学，可以：</p>
+                        <ul>
+                            <li>分享你的人物关系分析</li>
+                            <li>推荐优秀的文学作品</li>
+                            <li>帮助完善作品信息</li>
+                        </ul>
+                        <footer>
+                            <a
+                                href="add-book.html"
+                                role="button"
+                                class="outline"
+                            >
+                                添加作品
+                            </a>
+                        </footer>
+                    </article>
+                </div>
+
+                <p>
+                    <small
+                        >详细的数据添加指南请参考：<a href="ADD-BOOK.md"
+                            >ADD-BOOK.md</a
+                        ></small
+                    >
+                </p>
+            </article>
+
+            <!-- 技术栈 -->
+            <article id="tech-stack">
+                <h2>🛠️ 技术栈</h2>
+                <div class="grid">
+                    <div>
+                        <a
+                            href="https://js.cytoscape.org/"
+                            target="_blank"
+                            role="button"
+                            class="contrast outline"
+                            style="width: 100%"
+                        >
+                            Cytoscape.js
+                        </a>
+                    </div>
+                    <div>
+                        <a
+                            href="https://picocss.com/"
+                            target="_blank"
+                            role="button"
+                            class="contrast outline"
+                            style="width: 100%"
+                        >
+                            Pico CSS
+                        </a>
+                    </div>
+                    <div>
+                        <button
+                            class="contrast outline"
+                            style="width: 100%"
+                            disabled
+                        >
+                            JavaScript ES6+
+                        </button>
+                    </div>
+                </div>
+                <p>
+                    Sparkle 使用现代 Web
+                    技术构建，无需复杂的构建工具，开箱即用。
+                </p>
+            </article>
+
+            <!-- 支持作者 -->
+            <article id="support">
+                <h2>❤️ 支持作者</h2>
+                <p>如果你觉得这个项目对你有帮助，欢迎支持作者：</p>
+
+                <div class="grid">
+                    <div>
+                        <a
+                            href="https://ifdian.net/a/deadpoetspoon"
+                            target="_blank"
+                            role="button"
+                            class="primary"
+                            style="width: 100%"
+                        >
+                            ☕ 请作者喝一杯咖啡
+                        </a>
+                    </div>
+                    <div>
+                        <a
+                            href="https://github.com/DeadPoetSpoon/sparkle"
+                            target="_blank"
+                            role="button"
+                            class="secondary"
+                            style="width: 100%"
+                        >
+                            ⭐ GitHub Star
+                        </a>
+                    </div>
+                    <div>
+                        <button
+                            class="outline"
+                            style="width: 100%"
+                            onclick="shareProject()"
+                        >
+                            🔗 分享给朋友
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 许可证 -->
+            <article id="license">
+                <h2>📄 许可证</h2>
+                <p>
+                    本项目采用
+                    <strong>GNU General Public License v3.0 (GPLv3)</strong>
+                    开源许可证。
+                </p>
+                <p><strong>主要特点：</strong></p>
+                <ul>
+                    <li>自由使用、修改和分发</li>
+                    <li>衍生作品必须以相同许可证开源</li>
+                    <li>包含专利保护条款</li>
+                </ul>
+                <p>查看完整许可证：<a href="LICENSE">LICENSE</a></p>
+            </article>
+
+            <!-- 致谢 -->
+            <article id="acknowledgements">
+                <h2>🙏 致谢</h2>
+                <ul>
+                    <li>感谢所有文学创作者为我们带来精彩的作品</li>
+                    <li>
+                        感谢
+                        <a href="https://js.cytoscape.org/" target="_blank"
+                            >Cytoscape.js</a
+                        >
+                        提供强大的图可视化功能
+                    </li>
+                    <li>
+                        感谢
+                        <a href="https://picocss.com/" target="_blank"
+                            >Pico CSS</a
+                        >
+                        提供优雅的样式框架
+                    </li>
+                    <li>感谢所有贡献者和使用者的支持</li>
+                </ul>
+            </article>
+        </main>
+
+        <footer class="container">
+            <hr />
+            <p style="text-align: center">
+                Made with ❤️ for literature lovers<br />
+                <small>Sparkle ✨ - 那些人啊，繁星闪闪</small>
+            </p>
+            <nav style="display: flex; justify-content: center; gap: 1rem">
+                <ul>
+                    <li>
+                        <a
+                            href="https://github.com/DeadPoetSpoon/sparkle"
+                            target="_blank"
+                        >
+                            GitHub
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="https://gitee.com/DeadPoetSpoon/sparkle"
+                            target="_blank"
+                        >
+                            Gitee
+                        </a>
+                    </li>
+                    <li>
+                        <a href="LICENSE">许可证</a>
+                    </li>
+                    <li>
+                        <a href="#hero">回到顶部</a>
+                    </li>
+                </ul>
+            </nav>
+        </footer>
+
+        <script>
+            // 分享功能
+            function shareProject() {
+                const url = "https://deadpoetspoon.github.io/sparkle/";
+                const title = "Sparkle - 文学作品人物关系可视化工具";
+
+                if (navigator.share) {
+                    navigator.share({
+                        title: title,
+                        text: "发现一个有趣的文学作品人物关系可视化工具！",
+                        url: url,
+                    });
+                } else if (navigator.clipboard) {
+                    navigator.clipboard.writeText(url).then(() => {
+                        alert("链接已复制到剪贴板！");
+                    });
+                } else {
+                    prompt("请复制以下链接分享给朋友：", url);
+                }
+            }
+
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+                anchor.addEventListener("click", function (e) {
+                    const href = this.getAttribute("href");
+                    if (href !== "#") {
+                        e.preventDefault();
+                        const target = document.querySelector(href);
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: "smooth",
+                                block: "start",
+                            });
+                        }
+                    }
+                });
+            });
+
+            // 导航栏高亮
+            const sections = document.querySelectorAll("article[id]");
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+
+            function highlightNav() {
+                let current = "";
+                sections.forEach((section) => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (scrollY >= sectionTop - sectionHeight / 3) {
+                        current = section.getAttribute("id");
+                    }
+                });
+
+                navLinks.forEach((link) => {
+                    link.classList.remove("contrast");
+                    if (link.getAttribute("href") === `#${current}`) {
+                        link.classList.add("contrast");
+                    }
+                });
+            }
+
+            window.addEventListener("scroll", highlightNav);
+        </script>
     </body>
 </html>
