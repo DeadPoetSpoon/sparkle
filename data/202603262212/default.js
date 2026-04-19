@@ -569,4 +569,32 @@ export default [
       name: "信仰",
     },
   },
+  {
+    data: {
+      source: "b2",
+      target: "o1",
+      name: "参与",
+    },
+  },
+  {
+    data: {
+      source: "b7",
+      target: "b3",
+      name: "暗生情愫",
+    },
+  },
+  {
+    data: {
+      source: "a1",
+      target: "b6",
+      name: "渴望占有",
+    },
+  },
+  {
+    data: {
+      source: "b2",
+      target: "b5",
+      name: "暗恋",
+    },
+  },
 ];
