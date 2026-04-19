@@ -1,3 +1,153 @@
+// 全屏功能
+function adjustCytoscapeLayout() {
+  // 调整Cytoscape布局，确保图形居中显示
+  if (cy) {
+    cy.resize();
+    cy.center();
+    cy.fit();
+
+    // 添加一点边距，让图形不会贴边
+    setTimeout(() => {
+      if (cy) {
+        const currentZoom = cy.zoom();
+        if (currentZoom > 0.5) {
+          cy.zoom(currentZoom * 0.9);
+          cy.center();
+        }
+      }
+    }, 50);
+  }
+}
+
+function toggleFullscreen() {
+  const cyContainer = document.getElementById("cy");
+  const fullscreenBtn = document.getElementById("fullscreen-btn");
+
+  if (!document.fullscreenElement) {
+    // 进入全屏
+    if (cyContainer.requestFullscreen) {
+      cyContainer.requestFullscreen();
+    } else if (cyContainer.webkitRequestFullscreen) {
+      cyContainer.webkitRequestFullscreen();
+    } else if (cyContainer.msRequestFullscreen) {
+      cyContainer.msRequestFullscreen();
+    }
+
+    // 全屏时调整样式
+    cyContainer.style.height = "calc(100vh - 2rem)";
+    cyContainer.style.marginTop = "1rem";
+    cyContainer.style.borderRadius = "0";
+    cyContainer.style.backgroundColor = "var(--pico-background-color)";
+
+    // 调整按钮位置
+    fullscreenBtn.style.top = "2rem";
+    fullscreenBtn.style.right = "2rem";
+
+    // 更新按钮文本
+    fullscreenBtn.innerHTML = "❎ 退出全屏";
+
+    // 调整Cytoscape布局 - 使用setTimeout确保在全屏完全激活后执行
+    setTimeout(adjustCytoscapeLayout, 100);
+  } else {
+    // 退出全屏
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+
+    // 恢复原始样式
+    cyContainer.style.height = "40em";
+    cyContainer.style.marginTop = "0";
+    cyContainer.style.borderRadius = "";
+    cyContainer.style.backgroundColor = "";
+
+    // 恢复按钮位置
+    fullscreenBtn.style.top = "1rem";
+    fullscreenBtn.style.right = "1rem";
+
+    // 更新按钮文本
+    fullscreenBtn.innerHTML = "⛶ 全屏";
+
+    // 调整Cytoscape布局 - 使用setTimeout确保在退出全屏后执行
+    setTimeout(adjustCytoscapeLayout, 100);
+  }
+}
+
+// 监听全屏变化事件
+document.addEventListener("fullscreenchange", handleFullscreenChange);
+document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+document.addEventListener("msfullscreenchange", handleFullscreenChange);
+
+function handleFullscreenChange() {
+  const cyContainer = document.getElementById("cy");
+  const fullscreenBtn = document.getElementById("fullscreen-btn");
+
+  if (
+    !document.fullscreenElement &&
+    !document.webkitFullscreenElement &&
+    !document.msFullscreenElement
+  ) {
+    // 用户退出了全屏
+    cyContainer.style.height = "40em";
+    cyContainer.style.marginTop = "0";
+    cyContainer.style.borderRadius = "";
+    cyContainer.style.backgroundColor = "";
+
+    // 恢复按钮位置
+    fullscreenBtn.style.top = "1rem";
+    fullscreenBtn.style.right = "1rem";
+
+    fullscreenBtn.innerHTML = "⛶ 全屏";
+
+    // 确保图形居中显示
+    setTimeout(adjustCytoscapeLayout, 100);
+  } else {
+    // 用户进入了全屏
+    cyContainer.style.height = "calc(100vh - 2rem)";
+    cyContainer.style.marginTop = "1rem";
+    cyContainer.style.borderRadius = "0";
+    cyContainer.style.backgroundColor = "var(--pico-background-color)";
+
+    // 调整按钮位置
+    fullscreenBtn.style.top = "2rem";
+    fullscreenBtn.style.right = "2rem";
+
+    fullscreenBtn.innerHTML = "❎ 退出全屏";
+
+    // 调整Cytoscape布局
+    setTimeout(adjustCytoscapeLayout, 100);
+  }
+}
+
+// 初始化全屏按钮
+document.addEventListener("DOMContentLoaded", function () {
+  const fullscreenBtn = document.getElementById("fullscreen-btn");
+  if (fullscreenBtn) {
+    fullscreenBtn.addEventListener("click", function (event) {
+      event.stopPropagation();
+      event.preventDefault();
+      toggleFullscreen();
+    });
+
+    // 添加键盘快捷键支持 (F11 或 Esc)
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "F11") {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleFullscreen();
+      } else if (event.key === "Escape" && document.fullscreenElement) {
+        // Esc 键退出全屏
+        event.preventDefault();
+        event.stopPropagation();
+        toggleFullscreen();
+      }
+    });
+  }
+});
+
 var cy = cytoscape({
   container: document.getElementById("cy"), // container to render in
 
@@ -102,9 +252,9 @@ async function loadOptions() {
   authorSelector.addEventListener("change", async function (event) {
     const selectedAuthor = event.target.value;
     bookSelector.innerHTML =
-      '<option selected disabled value="">Select book...</option>';
+      '<option selected disabled value="">著作...</option>';
     versionSelector.innerHTML =
-      '<option selected disabled value="">Select version...</option>';
+      '<option selected disabled value="">版本...</option>';
 
     for (const auther of authors) {
       if (auther.id === selectedAuthor) {
@@ -126,7 +276,7 @@ async function loadOptions() {
   bookSelector.addEventListener("change", async function (event) {
     const selectedBook = event.target.value;
     versionSelector.innerHTML =
-      '<option selected disabled value="">Select version...</option>';
+      '<option selected disabled value="">版本...</option>';
     if (selectedBook && selectedBook != "") {
       try {
         const versions = await import(`./data/${selectedBook}/index-zh.js`);
@@ -192,6 +342,15 @@ async function loadData(book, version) {
 }
 
 cy.on("tap", "node", function (evt) {
+  // 检查是否点击了全屏按钮
+  if (
+    evt.originalEvent &&
+    evt.originalEvent.target &&
+    evt.originalEvent.target.id === "fullscreen-btn"
+  ) {
+    return;
+  }
+
   const node = evt.target;
   const nodeData = node.data();
 
@@ -202,6 +361,15 @@ cy.on("tap", "node", function (evt) {
 });
 
 cy.on("tap", function (evt) {
+  // 检查是否点击了全屏按钮
+  if (
+    evt.originalEvent &&
+    evt.originalEvent.target &&
+    evt.originalEvent.target.id === "fullscreen-btn"
+  ) {
+    return;
+  }
+
   if (evt.target === cy) {
     nodeInfo = "";
   }

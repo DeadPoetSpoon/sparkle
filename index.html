@@ -59,7 +59,47 @@
                 class="overflow-auto"
                 style="height: 10em"
             ></article>
-            <article id="cy" style="height: 40em"></article>
+            <article id="cy" style="height: 40em; position: relative">
+                <button
+                    id="fullscreen-btn"
+                    style="
+                        position: absolute;
+                        top: 1rem;
+                        right: 1rem;
+                        z-index: 1000;
+                        padding: 0.5rem 1rem;
+                        font-size: 0.875rem;
+                        background-color: var(--pico-primary-background);
+                        color: var(--pico-primary-inverse);
+                        border: var(--pico-border-width) solid
+                            var(--pico-primary-border);
+                        border-radius: var(--pico-border-radius);
+                        cursor: pointer;
+                        transition:
+                            background-color var(--pico-transition),
+                            border-color var(--pico-transition),
+                            color var(--pico-transition),
+                            box-shadow var(--pico-transition);
+                        opacity: 0.9;
+                        pointer-events: auto;
+                    "
+                    onmouseover="
+                        this.style.backgroundColor =
+                            'var(--pico-primary-hover-background)';
+                        this.style.borderColor =
+                            'var(--pico-primary-hover-border)';
+                        this.style.opacity = '1';
+                    "
+                    onmouseout="
+                        this.style.backgroundColor =
+                            'var(--pico-primary-background)';
+                        this.style.borderColor = 'var(--pico-primary-border)';
+                        this.style.opacity = '0.9';
+                    "
+                >
+                    ⛶ 全屏
+                </button>
+            </article>
             <article id="node-info"></article>
         </main>
         <script src="cytoscape.min.js"></script>
